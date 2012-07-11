@@ -242,12 +242,8 @@ void getEstimatedAttitude(){
   #endif
   
   // Attitude of the estimated vector
-  //angle[ROLL]  =  _atan2(EstG.V.X , EstG.V.Z) ;
-  //angle[PITCH] =  _atan2(EstG.V.Y , EstG.V.Z) ;
-
-  angle[ROLL]  =  _atan2(EstG.V.X , sqrt(EstG.V.Y*EstG.V.Y + EstG.V.Z*EstG.V.Z)) ;
-  angle[PITCH] =  _atan2(EstG.V.Y , sqrt(EstG.V.X*EstG.V.X + EstG.V.Z*EstG.V.Z)) ;
-
+  angle[ROLL]  =  _atan2(EstG.V.X , EstG.V.Z) ;
+  angle[PITCH] =  _atan2(EstG.V.Y , EstG.V.Z) ;
 
   #if MAG
     // Attitude of the cross product vector GxM
@@ -273,8 +269,8 @@ void getEstimatedAltitude(){
   int32_t temp32;
   int16_t last;
 
-  if (currentTime < deadLine) return;
-  deadLine = currentTime + UPDATE_INTERVAL; 
+  if (abs(currentTime - deadLine) < UPDATE_INTERVAL) return;
+  deadLine = currentTime; 
 
   //**** Alt. Set Point stabilization PID ****
   //calculate speed for D calculation

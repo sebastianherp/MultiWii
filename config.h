@@ -28,7 +28,7 @@
     //#define BI
     //#define TRI
     //#define QUADP
-    #define QUADX
+    //#define QUADX
     //#define Y4
     //#define Y6
     //#define HEX6
@@ -50,7 +50,7 @@
     //#define MINTHROTTLE 1300 // for Turnigy Plush ESCs 10A
     //#define MINTHROTTLE 1120 // for Super Simple ESCs 10A
     //#define MINTHROTTLE 1064 // special ESC (simonk)
-    #define MINTHROTTLE 1170
+    #define MINTHROTTLE 1150
 
   /****************************    Motor maxthrottle    *******************************/
     /* this is the maximum value for the ESCs at full power, this value can be increased up to 2000 */
@@ -85,7 +85,7 @@
       //#define FREEIMUv035_MS  // FreeIMU v0.3.5_MS                                                <- confirmed by Alex
       //#define FREEIMUv035_BMP // FreeIMU v0.3.5_BMP
       //#define FREEIMUv04      // FreeIMU v0.4 with MPU6050, HMC5883L, MS561101BA                  <- confirmed by Alex
-      #define FREEIMUv043     // same as FREEIMUv04 with final MPU6050 (with the right ACC scale)
+      //#define FREEIMUv043     // same as FREEIMUv04 with final MPU6050 (with the right ACC scale)
       //#define NANOWII         // the smallest multiwii FC based on MPU6050 + pro micro based proc <- confirmed by Alex
       //#define PIPO            // 9DOF board from erazz
       //#define QUADRINO        // full FC board 9DOF+baro board from witespy  with BMP085 baro     <- confirmed by Alex
@@ -185,7 +185,7 @@
    /* optionally disable stick combinations to arm/disarm the motors.
      * In most cases one of the two options to arm/disarm via TX stick is sufficient */
     #define ALLOW_ARM_DISARM_VIA_TX_YAW
-    //#define ALLOW_ARM_DISARM_VIA_TX_ROLL
+    #define ALLOW_ARM_DISARM_VIA_TX_ROLL
 
   /***********************          Cam Stabilisation             ***********************/
     /* The following lines apply only for a pitch/roll tilt stabilization system. Uncomment the first or second line to activate it */
@@ -299,7 +299,7 @@
       /* The following lines apply only for specific receiver with only one PPM sum signal, on digital PIN 2
          Select the right line depending on your radio brand. Feel free to modify the order in your PPM order is different */
       //#define SERIAL_SUM_PPM         PITCH,YAW,THROTTLE,ROLL,AUX1,AUX2,AUX3,AUX4 //For Graupner/Spektrum
-      #define SERIAL_SUM_PPM         ROLL,PITCH,THROTTLE,YAW,AUX4,AUX1,AUX2,AUX3 //For Robe/Hitec/Futaba
+      //#define SERIAL_SUM_PPM         ROLL,PITCH,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For Robe/Hitec/Futaba
       //#define SERIAL_SUM_PPM         PITCH,ROLL,THROTTLE,YAW,AUX1,AUX2,AUX3,AUX4 //For some Hitec/Sanwa/Others
 
     /**********************    Spektrum Satellite Reciver    *******************************/
@@ -479,7 +479,7 @@
     //#define FAILSAFE                                  // uncomment  to activate the failsafe function
     #define FAILSAVE_DELAY     10                     // Guard time for failsafe activation after signal lost. 1 step = 0.1sec - 1sec in example
     #define FAILSAVE_OFF_DELAY 200                    // Time for Landing before motors stop in 0.1sec. 1 step = 0.1sec - 20sec in example
-    #define FAILSAVE_THROTTLE  (MINTHROTTLE + 160)    // Throttle level used for landing - may be relative to MINTHROTTLE - as in this case
+    #define FAILSAVE_THROTTLE  (MINTHROTTLE + 200)    // Throttle level used for landing - may be relative to MINTHROTTLE - as in this case
 
 
   /*****************                DFRobot LED RING    *********************************/
@@ -527,7 +527,7 @@
 
     /* introduce a deadband around the stick center
        Must be greater than zero, comment if you dont want a deadband on roll, pitch and yaw */
-    #define DEADBAND 10
+    //#define DEADBAND 6
 
     /* defines the neutral zone of throttle stick during altitude hold, default setting is
        +/-20 uncommend and change the value below if you want to change it. */
@@ -584,7 +584,7 @@
        Convert the degree+minutes into decimal degree by ==> degree+minutes*(1/60)
        Note the sign on declination it could be negative or positive (WEST or EAST) */
     //#define MAG_DECLINIATION  3.96f              //For Budapest Hungary.
-    #define MAG_DECLINIATION  2.18f
+    #define MAG_DECLINIATION  0.0f
     
     #define GPS_FILTERING                        // add a 5 element moving average filter to GPS coordinates, helps eliminate gps noise but adds latency comment out to disable
     #define GPS_LOW_SPEED_D_FILTER               // below .5m/s speed ignore D term for POSHOLD_RATE, theoretically this also removed D term induced noise commnent out to disable
@@ -699,8 +699,9 @@
   /********************************************************************/
   /****                             Buzzer                         ****/
   /********************************************************************/
-    #define BUZZER
+    //#define BUZZER
     //#define RCOPTIONSBEEP        //uncomment this if you want the buzzer to beep at any rcOptions change on channel Aux1 to Aux4
+	//#define ARMEDTIMEWARNING 330  // Trigger an alarm after a certain time of being armed [s] to save you lipo (if your TX does not have a countdown)
 
   /********************************************************************/
   /****           battery voltage monitoring                       ****/
@@ -710,8 +711,8 @@
        with R1=33k and R2=51k
        vbat = [0;1023]*16/VBATSCALE
        must be associated with #define BUZZER ! */
-    #define VBAT              // uncomment this line to activate the vbat code
-    #define VBATSCALE     121 // change this value if readed Battery voltage is different than real voltage
+    //#define VBAT              // uncomment this line to activate the vbat code
+    #define VBATSCALE     131 // change this value if readed Battery voltage is different than real voltage
     #define VBATLEVEL1_3S 107 // 10,7V
     #define VBATLEVEL2_3S 103 // 10,3V
     #define VBATLEVEL3_3S 99  // 9.9V
@@ -750,7 +751,7 @@
             3. enjoy true readings of mAh consumed
        set POWERMETER to "soft" (1) or "hard" (2) depending on sensor you want to utilize */
     //#define POWERMETER_SOFT
-    #define POWERMETER_HARD
+    //#define POWERMETER_HARD
     /* the sum of all powermeters ranges from [0:60000 e4] theoretically.
        the alarm level from eeprom is out of [0:255], so we multipy alarm level with PLEVELSCALE and with 1e4 before comparing
        PLEVELSCALE is the step size you can use to set alarm */
@@ -758,13 +759,13 @@
     /* larger PLEVELDIV will get you smaller value for power (mAh equivalent) */
     #define PLEVELDIV 5000 // default for soft - if you lower PLEVELDIV, beware of overrun in uint32 pMeter
     #define PLEVELDIVSOFT PLEVELDIV // for soft always equal to PLEVELDIV; for hard set to 5000
-    #define PLEVELDIV 1147L // to convert the sum into mAh divide by this value
+    //#define PLEVELDIV 1361L // to convert the sum into mAh divide by this value
     /* amploc 25A sensor has 37mV/A
        arduino analog resolution is 4.9mV per unit; units from [0..1023]
        sampling rate 20ms, approx 19977 micro seconds
        PLEVELDIV = 37 / 4.9  * 10e6 / 18000  * 3600 / 1000  = 1361L
        set to analogRead() value for zero current */
-    #define PSENSORNULL 512 // for I=0A my sensor gives 1/2 Vss; that is approx 2.49Volt
+    #define PSENSORNULL 510 // for I=0A my sensor gives 1/2 Vss; that is approx 2.49Volt
     #define PINT2mA 13 // for telemtry display: one integer step on arduino analog translates to mA (example 4.9 / 37 * 100
 
 

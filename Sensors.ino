@@ -610,9 +610,6 @@ void i2c_MS561101BA_Calculate() {
   off  -= off2; 
   sens -= sens2;
   pressure     = (( (ms561101ba_ctx.up.val * sens ) >> 21) - off) >> 15;
-  
-  debug[0] = temperature;
-  debug[1] = pressure;
 }
 
 void Baro_update() {
