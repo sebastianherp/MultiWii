@@ -33,7 +33,7 @@ void getEstimatedAttitude() {
 #endif
   
   static float q1 = 1, q2 = 0, q3 = 0, q4 = 0;
-  static float Kp = 2.0f;
+  static float Kp = 3.0f;
   static float Ki = 0.001f;
   static float eInt1, eInt2, eInt3;
   float norm;
@@ -164,6 +164,8 @@ void getEstimatedAttitude() {
   angle[ROLL] = -_atan2(vx, sqrt(vy*vy + vz*vz));
   angle[PITCH] = -_atan2(vy, sqrt(vx*vx + vz*vz));
   heading = _atan2(2*q2*q3 - 2*q1*q4, 2*q1*q1 + 2*q2*q2 - 1) / 10 - 90 + MAG_DECLINIATION;
+    if ( heading > 180)      heading = heading - 360;
+    else if (heading < -180) heading = heading + 360;  
 }
 
 #endif // IMU_EXPERIMENTAL
