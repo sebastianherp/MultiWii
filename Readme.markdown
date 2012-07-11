@@ -14,7 +14,7 @@ Goals
 -------------------
 
  * staying compatible with existing MultiWii verions (currently 2.1 and its release candidates)
- * robust attitude estimation code (at the expense of some precious bytes, currently 3650)
+ * robust attitude estimation code (at the expense of some precious bytes, currently 3250 bytes)
  * better altitude estimation code and altitude hold mode
  * shrinking code size (binary form), so everything still fits in a Arduino Pro Mini (328P)
  

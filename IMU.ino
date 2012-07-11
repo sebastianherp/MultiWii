@@ -29,7 +29,11 @@ void computeIMU () {
   #else
     #if ACC
       ACC_getADC();
-      getEstimatedAttitude();
+      #if defined IMU_NORMAL
+        getEstimatedAttitude();
+      #elif defined IMU_EXPERIMENTAL
+        getEstimatedAttitudeExperimental();
+      #endif
     #endif
     #if GYRO
       Gyro_getADC();
@@ -90,7 +94,7 @@ void computeIMU () {
 /* Increasing this value would reduce ACC noise (visible in GUI), but would increase ACC lag time*/
 /* Comment this if  you do not want filter at all.*/
 #ifndef ACC_LPF_FACTOR
-  #define ACC_LPF_FACTOR 10
+  #define ACC_LPF_FACTOR 100
 #endif
 
 /* Set the Low Pass Filter factor for Magnetometer */
@@ -117,7 +121,7 @@ void computeIMU () {
 
 //****** end of advanced users settings *************
 
-#if !defined IMU_EXPERIMENTAL
+
 
 #define INV_GYR_CMPF_FACTOR   (1.0f / (GYR_CMPF_FACTOR  + 1.0f))
 #define INV_GYR_CMPFM_FACTOR  (1.0f / (GYR_CMPFM_FACTOR + 1.0f))
@@ -177,6 +181,8 @@ void rotateV(struct fp_vector *v,float* delta) {
   v->X += delta[ROLL]  * v_tmp.Z - delta[YAW]   * v_tmp.Y;
   v->Y += delta[PITCH] * v_tmp.Z + delta[YAW]   * v_tmp.X; 
 }
+
+#if defined IMU_NORMAL
 
 void getEstimatedAttitude(){
   uint8_t axis;
