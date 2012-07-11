@@ -39,6 +39,7 @@ static uint8_t inBuf[INBUF_SIZE];
 #define MSP_BOXNAMES             116   //out message         the aux switch names
 #define MSP_PIDNAMES             117   //out message         the PID names
 #define MSP_WP                   118   //out message         get a WP, WP# is in the payload, returns (WP#, lat, lon, alt, flags) WP#0-home, WP#16-poshold
+#define MSP_SUPERRAW_IMU         119   //out message         get really raw imu values (enables external calculations)
 
 #define MSP_SET_RAW_RC           200   //in message          8 rc chan
 #define MSP_SET_RAW_GPS          201   //in message          fix, numsat, lat, lon, alt, speed
@@ -225,6 +226,12 @@ void evaluateCommand() {
      for(uint8_t i=0;i<3;i++) serialize16(gyroData[i]);
      for(uint8_t i=0;i<3;i++) serialize16(magADC[i]);
      break;
+   case MSP_SUPERRAW_IMU:
+     headSerialReply(18);
+     for(uint8_t i=0;i<3;i++) serialize16(accADC[i]);
+     for(uint8_t i=0;i<3;i++) serialize16(gyroADC[i]);
+     for(uint8_t i=0;i<3;i++) serialize16(magADC[i]);
+     break;     
    case MSP_SERVO:
      headSerialReply(16);
      for(uint8_t i=0;i<8;i++)

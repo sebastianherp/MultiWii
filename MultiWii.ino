@@ -175,7 +175,7 @@ static uint16_t intPowerMeterSum, intPowerTrigger1;
 // rc functions
 // ******************
 #define MINCHECK 1100
-#define MAXCHECK 1900
+#define MAXCHECK 1800
 
 static int16_t failsafeEvents = 0;
 volatile int16_t failsafeCnt = 0;
@@ -992,8 +992,9 @@ void loop () {
       if (abs(gyroData[axis])>640) errorGyroI[axis] = 0;
       ITerm = (errorGyroI[axis]/125*conf.I8[axis])>>6;                                   // 16 bits is ok here 16000/125 = 128 ; 128*250 = 32000
     }
-    if (abs(gyroData[axis])<160) PTerm -=          gyroData[axis]*dynP8[axis]/10/8; // 16 bits is needed for calculation   160*200 = 32000         16 bits is ok for result
-                            else PTerm -= (int32_t)gyroData[axis]*dynP8[axis]/10/8; // 32 bits is needed for calculation   
+    //if (abs(gyroData[axis])<160) PTerm -=          gyroData[axis]*dynP8[axis]/10/8; // 16 bits is needed for calculation   160*200 = 32000         16 bits is ok for result
+    //                        else PTerm -= (int32_t)gyroData[axis]*dynP8[axis]/10/8; // 32 bits is needed for calculation   
+                            PTerm -= (int32_t)gyroData[axis]*dynP8[axis]/10/8; // 32 bits is needed for calculation   
 
     delta          = gyroData[axis] - lastGyro[axis];                               // 16 bits is ok here, the dif between 2 consecutive gyro reads is limited to 800
     lastGyro[axis] = gyroData[axis];
