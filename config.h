@@ -15,8 +15,8 @@
  */
 
 
-#define IMU_EXPERIMENTAL    // uncomment to use
-//#define IMU_NORMAL        // uncomment to use (default imu code)
+//#define IMU_EXPERIMENTAL    // uncomment to use
+#define IMU_NORMAL        // uncomment to use (default imu code)
 
 /*************************************************************************************************/
 /*****************                                                                 ***************/

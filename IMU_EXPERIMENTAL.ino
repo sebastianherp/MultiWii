@@ -1,8 +1,10 @@
 
 #if defined IMU_EXPERIMENTAL
 
-#define KpACCMAG 5.0f
-#define KiACCMAG 0.001f
+#define KpACC 2.0f
+#define KiACC 0.0001f
+#define KpMAG 5.0f
+#define KiMAG 0.0001f
 #define GYRO_SCALE (4.0f / 16.384f * PI / 180.0f);
 #define NORM_AS_FUNCTION
 
@@ -51,10 +53,12 @@ void getEstimatedAttitudeExperimental() {
   
   static float q1 = 1, q2 = 0, q3 = 0, q4 = 0;
   static float eInt1, eInt2, eInt3;
+  static float eInt1Mag, eInt2Mag, eInt3Mag;
   float norm;
   float hx, hy, bx, bz;
   float vx, vy, vz, wx, wy, wz;
-  float ex, ey, ez;
+  float exAcc, eyAcc, ezAcc;
+  float exMag, eyMag, ezMag;
   float pa, pb, pc;
 
   // Auxiliary variables to avoid repeated arithmetic
@@ -148,28 +152,43 @@ void getEstimatedAttitudeExperimental() {
   //debug[1] = -_atan2(vy, sqrt(vx*vx + vz*vz));
   //debug[2] = angle[ROLL];
   //debug[3] = angle[PITCH];
+  
+  debug[0] = heading;
+  debug[1] = _atan2(2*(q1q4 + q2q3), 1 - 2*(q1q1 + q3q3)) / 10 + MAG_DECLINIATION;
+  debug[2] = _atan2(2*(q1q4 + q2q3), 1 - 2*(q2q2 + q3q3)) / 10 + MAG_DECLINIATION;
+  debug[3] = _atan2(2*(q1q4 + q2q3), 1 - 2*(q3q3 + q4q4)) / 10 + MAG_DECLINIATION;
 
   // Error is cross product between estimated direction and measured direction of gravity
-  ex = (ay * vz - az * vy) + (my * wz - mz * wy);
-  ey = (az * vx - ax * vz) + (mz * wx - mx * wz);
-  ez = (ax * vy - ay * vx) + (mx * wy - my * wx);
-  if (KiACCMAG > 0.0f)
-  {
-      eInt1 += ex;      // accumulate integral error
-      eInt2 += ey;
-      eInt3 += ez;
+  exAcc = (ay * vz - az * vy);
+  eyAcc = (az * vx - ax * vz);
+  ezAcc = (ax * vy - ay * vx);
+  exMag = (my * wz - mz * wy);
+  eyMag = (mz * wx - mx * wz);
+  ezMag = (mx * wy - my * wx);
+  
+  if(KiACC> 0.0f) {      
+    eInt1 += exAcc;      // accumulate integral error
+    eInt2 += eyAcc;
+    eInt3 += ezAcc;
+  } else {
+    eInt1 = 0.0f;     // prevent integral wind up
+    eInt2 = 0.0f;
+    eInt3 = 0.0f;
   }
-  else
-  {
-      eInt1 = 0.0f;     // prevent integral wind up
-      eInt2 = 0.0f;
-      eInt3 = 0.0f;
+  if(KiMAG > 0.0f) {      
+    eInt1Mag += exMag;
+    eInt2Mag += eyMag;
+    eInt3Mag += ezMag;
+  } else {
+    eInt1Mag = 0.0f;     // prevent integral wind up
+    eInt2Mag = 0.0f;
+    eInt3Mag = 0.0f;
   }
 
   // Apply feedback terms
-  gx = gx + KpACCMAG * ex + KiACCMAG * eInt1;
-  gy = gy + KpACCMAG * ey + KiACCMAG * eInt2;
-  gz = gz + KpACCMAG * ez + KiACCMAG * eInt3;
+  gx = gx + KpACC * exAcc + KpMAG * exMag + KiACC * eInt1 + KiMAG * eInt1Mag;
+  gy = gy + KpACC * eyAcc + KpMAG * eyMag + KiACC * eInt2 + KiMAG * eInt2Mag;
+  gz = gz + KpACC * ezAcc + KpMAG * ezMag + KiACC * eInt3 + KiMAG * eInt3Mag;
 
   // Integrate rate of change of quaternion
   pa = q2;
